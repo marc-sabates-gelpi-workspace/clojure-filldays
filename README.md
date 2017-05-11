@@ -4,7 +4,12 @@ Clojure snipet that provided with a list of numbers returns the numbers and the 
 
 ## Usage
 
+    $ lein uberjar
     $ java -jar filldays-0.1.0-standalone.jar 1 3 5
+
+    or
+
+    $ lein run 1 3 5
 
 ## License
 
