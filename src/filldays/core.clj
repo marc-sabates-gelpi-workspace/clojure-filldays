@@ -1,41 +1,34 @@
 (ns filldays.core
-  (:require [clj-time.core :as t])
+  (:require [clj-time.core :as t]
+            [clj-time.format :as f]
+            [filldays.time-utils :refer :all])
   (:gen-class
    :name filldays.core))
 
-(defn ifill
-  "Returns a list of numbers between a and b"
+(defn ifilld
+  "Returns a list of dates between a and b excluded"
   [a b]
-  (let [ainc (inc a)]
+  (let [day-after-a (t/plus a (t/days 1))]
     (cond
-    (> b ainc) (concat (list ainc) (ifill ainc b))
-    (< b a) (ifill b a)
+    (t/after? b day-after-a) (concat (list day-after-a) (ifilld day-after-a b))
+    (t/before? b a) (ifilld b a)
     :else '()
     )
   )
 )
 
-(defn mfill
-  "Returns a list with the numbers in the list-argument plus their gaps filled"
+(defn mfilld
+  "Returns a list with the dates in the list-argument plus their gaps filled"
   [[a b & r]]
   (cond
    (nil? b) (list a)
-   :else (concat (list a) (ifill a b) (mfill (cons b r)))
+   :else (concat (list a) (ifilld a b) (mfilld (cons b r)))
   )
 )
 
-(defn smfill
-  "Sorts the list-argument before calling mfill"
-  [s]
-  (mfill (sort s))
-  )
-
-(defn String->Number [str]
-  (let [n (read-string str)]
-       (if (number? n) n nil)))
-
 (defn -main
   [& args]
-  (prn (smfill (map String->Number args))
+  (prn
+   (Dates->Strings (mfilld (sort (Strings->Dates args))))
   )
 )
