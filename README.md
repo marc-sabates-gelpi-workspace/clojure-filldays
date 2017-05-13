@@ -1,6 +1,6 @@
 # filldays
 
-Clojure snipet that provided with a list of numbers returns the numbers and the gaps in-between filled
+Clojure snipet that provided a list of ISO formatted dates returns the dates and the gaps in-between filled
 
 ## Usage
 
@@ -10,6 +10,10 @@ Clojure snipet that provided with a list of numbers returns the numbers and the 
     or
 
     $ lein run 2017-05-12T00:00:00Z 2017-05-16T00:00:00Z 2017-05-14T00:00:00Z
+
+    try
+
+    $ lein test
 
 ## License
 
