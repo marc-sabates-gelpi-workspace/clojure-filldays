@@ -8,7 +8,8 @@
 (defn ifilld
   "Returns a list of dates between a and b excluded"
   [a b]
-  (let [day-after-a (t/plus a (t/days 1))]
+  (let [day-after-a (->> (t/days 1)
+                         (t/plus a))]
     (cond
     (t/after? b day-after-a) (concat (list day-after-a) (ifilld day-after-a b))
     (t/before? b a) (ifilld b a)
@@ -22,13 +23,18 @@
   [[a b & r]]
   (cond
    (nil? b) (list a)
-   :else (concat (list a) (ifilld a b) (mfilld (cons b r)))
+   :else (->> (cons b r)
+              mfilld
+              (concat (list a) (ifilld a b)))
   )
 )
 
 (defn -main
   [& args]
-  (prn
-   (Dates->Strings (mfilld (sort (Strings->Dates args))))
-  )
+  (->> args
+       Strings->Dates
+       sort
+       mfilld
+       Dates->Strings
+       prn)
 )
